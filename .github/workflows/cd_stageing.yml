@@ -12,14 +12,14 @@ jobs:
     steps:
       - name: Setup SSH Key
         run: |
-          echo "${{ secrets.SSH_PRIVATE_KEY }}" | tr -d '\r' > ~/ssh_key
+          echo -e "${{ secrets.SSH_PRIVATE_KEY }}" > ~/ssh_key
           chmod 600 ~/ssh_key
           eval "$(ssh-agent -s)"
           ssh-add ~/ssh_key
 
       - name: SSH Into Server and Deploy
         run: |
-          ssh -o StrictHostKeyChecking=no root@52.66.81.169 -i ~/ssh_key << 'EOF'
+          ssh -o StrictHostKeyChecking=no -i ~/ssh_key root@52.66.81.169 << 'EOF'
             cd Turborepo-devops && git pull
             pnpm install
             pnpm run build
