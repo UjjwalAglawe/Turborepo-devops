@@ -1,0 +1,24 @@
+name: Deploy to staging
+on:
+  push:
+    branches:
+      - "main"
+
+
+jobs:
+  redeploy_everything:
+    name: Deploying the everything to staging cluster
+
+    steps:
+      - name: SSH Into server
+      - run: |
+          echo ${{secrets.SSH_PRIVATE_KEY}} &> ~/ssh_key
+          ssh -i ~/ssh_key root@52.66.81.169
+          cd cd Turborepo-devops && git pull
+          pnpm install
+          pnpm run build
+          pm2 restart fe-server
+          pm2 restart http-server
+          pm2 restart ws-server
+
+
