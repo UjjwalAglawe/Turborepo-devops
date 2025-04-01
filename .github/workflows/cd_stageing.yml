@@ -17,5 +17,5 @@ jobs:
           ssh -o StrictHostKeyChecking=no -i ~/ssh_key ubuntu@52.66.81.169 << 'EOF'
             echo "Checking available directories..."
               ls -la
-              "cd Turborepo-devops/ && git pull origin main && export PATH=/root/.nvm/versions/node/v22.13.1/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin && npm install -g pnpm && pnpm install && pnpm run build && pm2 restart all"
+              "/home/ubuntu/Turborepo-devops && git pull origin main && export PATH=/root/.nvm/versions/node/v22.13.1/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin && npm install -g pnpm && pnpm install && pnpm run build && pm2 restart all"
           EOF
