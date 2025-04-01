@@ -13,9 +13,27 @@ jobs:
           echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/ssh_key
           chmod 600 ~/ssh_key
 
-          # Connect via SSH as ubuntu (not root) and execute deployment commands
+          # Connect via SSH as ubuntu and execute deployment commands
           ssh -o StrictHostKeyChecking=no -i ~/ssh_key ubuntu@52.66.81.169 << 'EOF'
             echo "Checking available directories..."
-              ls -la
-              "/home/ubuntu/Turborepo-devops && git pull origin main && export PATH=/root/.nvm/versions/node/v22.13.1/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin && npm install -g pnpm && pnpm install && pnpm run build && pm2 restart all"
+            ls -la
+
+            # Navigate to the correct project directory
+            cd /home/ubuntu/Turborepo-devops || exit 1
+            git pull origin main
+
+            # Ensure NVM is loaded correctly
+            export NVM_DIR="/home/ubuntu/.nvm"
+            [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+
+            # Use correct Node.js version
+            nvm use 22 || nvm install 22
+
+            # Install dependencies
+            npm install -g pnpm pm2
+            pnpm install
+            pnpm run build
+
+            # Restart all PM2 processes
+            pm2 restart all
           EOF
