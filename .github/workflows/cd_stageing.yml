@@ -14,8 +14,8 @@ jobs:
           chmod 600 ~/ssh_key
 
           # Connect via SSH and execute deployment commands
-          ssh -o StrictHostKeyChecking=no -i ~/ssh_key root@64.227.147.124 << 'EOF'
-            cd week-25-ci-next-app/ && git pull origin main
+          ssh -o StrictHostKeyChecking=no -i ~/ssh_key root@52.66.81.169 << 'EOF'
+            cd Turborepo-devops/ && git pull origin main
             export PATH=/root/.nvm/versions/node/v22.13.1/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin
             npm install -g pnpm
             pnpm install
