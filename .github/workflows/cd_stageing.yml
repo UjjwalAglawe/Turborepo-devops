@@ -4,22 +4,24 @@ on:
     branches:
       - "main"
 
-
 jobs:
   redeploy_everything:
-    name: Deploying the everything to staging cluster
+    name: Deploying everything to staging cluster
     runs-on: ubuntu-latest
 
     steps:
-      - name: SSH Into server
+      - name: Setup SSH Key
         run: |
-          echo "${{secrets.SSH_PRIVATE_KEY}}" &> ~/ssh_key
-          ssh -i ~/ssh_key root@52.66.81.169
-          cd Turborepo-devops && git pull
-          pnpm install
-          pnpm run build
-          pm2 restart fe-server
-          pm2 restart http-server
-          pm2 restart ws-server
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/ssh_key
+          chmod 600 ~/ssh_key
 
-
+      - name: SSH Into Server and Deploy
+        run: |
+          ssh -o StrictHostKeyChecking=no -i ~/ssh_key root@52.66.81.169 << 'EOF'
+            cd Turborepo-devops && git pull
+            pnpm install
+            pnpm run build
+            pm2 restart fe-server
+            pm2 restart http-server
+            pm2 restart ws-server
+          EOF
