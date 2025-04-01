@@ -11,15 +11,15 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      name: SSH Into server
-      run: |
-        echo ${{secrets.SSH_PRIVATE_KEY}} &> ~/ssh_key
-        ssh -i ~/ssh_key root@52.66.81.169
-        cd cd Turborepo-devops && git pull
-        pnpm install
-        pnpm run build
-        pm2 restart fe-server
-        pm2 restart http-server
-        pm2 restart ws-server
+      - name: SSH Into server
+        run: |
+          echo "${{secrets.SSH_PRIVATE_KEY}}" &> ~/ssh_key
+          ssh -i ~/ssh_key root@52.66.81.169
+          cd Turborepo-devops && git pull
+          pnpm install
+          pnpm run build
+          pm2 restart fe-server
+          pm2 restart http-server
+          pm2 restart ws-server
 
 
